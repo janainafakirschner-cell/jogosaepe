@@ -723,7 +723,10 @@
                 bancoQuestoes = data.filter(q => q.enunciado && String(q.enunciado).trim() !== "");
                 
                 if (bancoQuestoes.length > 0) {
-                    bancoQuestoes.sort(() => Math.random() - 0.5);
+    // Embaralha e seleciona estritamente 10 questões aleatórias do total
+    bancoQuestoes.sort(() => Math.random() - 0.5);
+    bancoQuestoes = bancoQuestoes.slice(0, 10);
+}
                 } else {
                     exibirErro("PLANILHA VAZIA", "Nenhuma questão válida foi encontrada nas linhas da planilha.");
                 }
