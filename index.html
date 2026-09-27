@@ -50,11 +50,11 @@
             align-items: center;
         }
 
-        /* Container Principal: Responsivo para Celular e Moldura em Desktop */
+        /* PREDEFINIÇÃO PARA TELEMÓVEL: Ocupa 100% da ecrã real do dispositivo */
         .mobile-device {
-            width: 100%;
-            max-width: 430px;
+            width: 100vw;
             height: 100vh;
+            max-width: 100%;
             max-height: 100%;
             background: var(--tactical-dark);
             background-image: 
@@ -65,15 +65,17 @@
             flex-direction: column;
             position: relative;
             overflow: hidden;
-            border: 1px solid #1e293b;
+            border: none;
         }
 
-        /* Visual de Simulador apenas em Computadores/Tablets maiores */
-        @media (min-width: 480px) {
+        /* MOLDURA DE SIMULADOR: Aplica-se APENAS em computadores/monitores grandes */
+        @media (min-width: 768px) and (min-height: 700px) {
             body {
                 padding: 20px;
             }
             .mobile-device {
+                width: 100%;
+                max-width: 420px;
                 height: 680px;
                 max-height: 850px;
                 border-radius: 24px;
