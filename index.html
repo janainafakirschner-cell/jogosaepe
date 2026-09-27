@@ -123,7 +123,7 @@
 
         .ai-image-container {
             width: 100%;
-            height: 120px;
+            height: 125px;
             background: #000;
             border: 1px solid var(--tactical-orange);
             border-radius: 6px;
@@ -147,8 +147,8 @@
             top: 0; left: 0; right: 0; bottom: 0;
             pointer-events: none;
             background: 
-                linear-gradient(rgba(255, 85, 0, 0.1) 1px, transparent 1px),
-                radial-gradient(circle, transparent 60%, rgba(0, 0, 0, 0.6) 100%);
+                linear-gradient(rgba(255, 85, 0, 0.12) 1px, transparent 1px),
+                radial-gradient(circle, transparent 55%, rgba(0, 0, 0, 0.65) 100%);
             background-size: 100% 4px, 100% 100%;
         }
 
@@ -431,7 +431,7 @@
 
     <div class="rainbow-bar"></div>
 
-    <!-- TELA 1: CAPA -->
+    <!-- TELA 1: CAPA (Letreiro Recife) -->
     <div id="screen-cover" class="screen active">
         <div style="padding: 2px; flex: 1; display: flex; flex-direction: column;">
             <div class="tactical-card" style="flex: 1; display: flex; flex-direction: column;">
@@ -442,17 +442,17 @@
                 </div>
 
                 <div class="ai-image-container" onclick="openImageModal(document.getElementById('img-cover').src)">
-                    <!-- Imagem: Recife Antigo Noturno Tático -->
-                    <img id="img-cover" src="https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?auto=format&fit=crop&w=600&q=80" alt="Recife Antigo - Centro Tático">
+                    <!-- Imagem 1: Letreiro Recife -->
+                    <img id="img-cover" src="https://iili.io/n5se0XV.png" alt="Letreiro Recife no Marco Zero">
                     <div class="ai-hud-overlay"></div>
-                    <div class="ai-badge">🔍 MARCO ZERO // RECIFE PE</div>
+                    <div class="ai-badge">📍 ENTRADA DA CIDADE // LETREIRO RECIFE</div>
                 </div>
 
                 <div class="tactical-title">ESQUADRÃO SAEPE</div>
                 <div class="tactical-subtitle">OPERAÇÃO: DECODIFICAÇÃO DE TEXTOS</div>
 
-                <div class="tactical-line">Uma I.A. infectou o banco de dados oficial de Pernambuco.</div>
-                <div class="tactical-line">Os textos e canais de comunicação foram corrompidos!</div>
+                <div class="tactical-line">Uma I.A. infectou o sistema de informações de Recife.</div>
+                <div class="tactical-line">Os painéis da cidade foram adulterados com erros linguísticos!</div>
 
                 <div class="commander-input-box" style="margin-top: auto;">
                     <label class="commander-label">[!] IDENTIFICAÇÃO OBRIGATÓRIA DO COMANDANTE:</label>
@@ -469,30 +469,30 @@
         </div>
     </div>
 
-    <!-- TELA NARRATIVA 0: INTRODUÇÃO DA MISSÃO -->
+    <!-- TELA NARRATIVA 0: INTRODUÇÃO DA MISSÃO (Vista Aérea) -->
     <div id="screen-story-0" class="screen">
         <div style="padding: 2px; flex: 1; display: flex; flex-direction: column;">
             <div class="tactical-card" style="flex: 1; display: flex; flex-direction: column;">
-                <div class="tactical-subtitle" style="color: var(--tactical-amber);">[!] BRIEFING DE INTEL // ALERTA MÁXIMO</div>
+                <div class="tactical-subtitle" style="color: var(--tactical-amber);">[!] BRIEFING DE INTEL // VARREDURA AÉREA</div>
 
-                <div class="ai-image-container" style="height: 130px;" onclick="openImageModal(document.getElementById('img-story-0').src)">
-                    <!-- Imagem: Pontes sobre o Rio Capibaribe em Recife -->
-                    <img id="img-story-0" src="https://images.unsplash.com/photo-1549880338-65ddcdfd017b?auto=format&fit=crop&w=600&q=80" alt="Pontes de Recife">
+                <div class="ai-image-container" style="height: 125px;" onclick="openImageModal(document.getElementById('img-story-0').src)">
+                    <!-- Imagem 3: Vista Aérea das Pontes e Rio Capibaribe -->
+                    <img id="img-story-0" src="https://iili.io/n5svaVV.png" alt="Vista Aérea das Pontes de Recife">
                     <div class="ai-hud-overlay"></div>
-                    <div class="ai-badge">FASE 1 // LEITURA E INTERPRETAÇÃO</div>
+                    <div class="ai-badge">FASE 1 // RECONHECIMENTO AÉREO DE DADOS</div>
                 </div>
 
-                <div class="tactical-title" style="font-size: 13px; color: var(--tactical-orange);">APAGÃO DE COMUNICAÇÃO</div>
+                <div class="tactical-title" style="font-size: 13px; color: var(--tactical-orange);">MAPEAMENTO DO CAPIBARIBE</div>
                 <p style="font-size: 10px; color: #cbd5e1; line-height: 1.35; margin-bottom: 6px;">
-                    Comandante! O vírus alterou os textos do servidor. A população não consegue interpretar os comunicados de emergência.
+                    Comandante! Do alto, identificámos que as pontes sobre o Rio Capibaribe estão com as rotas de transmissão bloqueadas por ruídos textuais.
                 </p>
 
-                <div class="tactical-line">Sua primeira missão é analisar os fragmentos textuais.</div>
-                <div class="tactical-line">Decodifique os 3 textos para restabelecer a compreensão.</div>
+                <div class="tactical-line">A população não consegue interpretar os alertas nas vias.</div>
+                <div class="tactical-line">Analise os fragmentos para desbloquear o acesso aéreo.</div>
 
                 <div class="tactical-box" style="border-color: var(--tactical-orange);">
                     <strong>OBJETIVO FASE 1:</strong><br>
-                    Resolver 3 questões de interpretação e inferência textual.
+                    Resolver 3 questões de leitura, interpretação e inferência.
                 </div>
 
                 <button class="btn-tactical" style="margin-top: auto;" onclick="iniciarFase(1)">
@@ -506,30 +506,30 @@
         </div>
     </div>
 
-    <!-- TELA NARRATIVA 1: TRANSIÇÃO PARA A FASE 2 -->
+    <!-- TELA NARRATIVA 1: TRANSIÇÃO PARA A FASE 2 (Rua da Aurora) -->
     <div id="screen-story-1" class="screen">
         <div style="padding: 2px; flex: 1; display: flex; flex-direction: column;">
             <div class="tactical-card" style="flex: 1; display: flex; flex-direction: column;">
-                <div class="tactical-subtitle" style="color: var(--tactical-green);">[✓] FASE 1 CONCLUÍDA // LEITURA RESTAURADA</div>
+                <div class="tactical-subtitle" style="color: var(--tactical-green);">[✓] FASE 1 CONCLUÍDA // ROTA AÉREA LIBERADA</div>
 
-                <div class="ai-image-container" style="height: 130px;" onclick="openImageModal(document.getElementById('img-story-1').src)">
-                    <!-- Imagem: Antena e Torres de Comunicação -->
-                    <img id="img-story-1" src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=600&q=80" alt="Antenas de Transmissão Tática">
+                <div class="ai-image-container" style="height: 125px;" onclick="openImageModal(document.getElementById('img-story-1').src)">
+                    <!-- Imagem 4: Rua da Aurora -->
+                    <img id="img-story-1" src="https://iili.io/n5svklt.png" alt="Rua da Aurora">
                     <div class="ai-hud-overlay"></div>
-                    <div class="ai-badge">FASE 2 // REGRAS E COERÊNCIA</div>
+                    <div class="ai-badge">FASE 2 // INTERCEÇÃO NA RUA DA AURORA</div>
                 </div>
 
-                <div class="tactical-title" style="font-size: 13px; color: var(--tactical-orange);">RUÍDO NA TRANSMISSÃO DE RÁDIO</div>
+                <div class="tactical-title" style="font-size: 13px; color: var(--tactical-orange);">DESINFORMAÇÃO NA RUA DA AURORA</div>
                 <p style="font-size: 10px; color: #cbd5e1; line-height: 1.35; margin-bottom: 6px;">
-                    Excelente avanço! O sentido das frases foi recuperado, mas a I.A. desestruturou a coesão das frequências de rádio da polícia.
+                    Avançámos para a margem do rio! Os edifícios históricos da Rua da Aurora estão a refletir sinais distorcidos de gramática e coesão.
                 </p>
 
-                <div class="tactical-line">Precisamos identificar a pontuação e os conectivos corretos.</div>
-                <div class="tactical-line">Superar 3 desafios gramaticais liberará as transmissões.</div>
+                <div class="tactical-line">Precisamos de corrigir a pontuação e os conectivos.</div>
+                <div class="tactical-line">Supere os 3 desafios de estruturação para limpar o sinal.</div>
 
                 <div class="tactical-box" style="border-color: var(--tactical-amber);">
                     <strong>OBJETIVO FASE 2:</strong><br>
-                    Resolver 3 questões de coesão, coerência e uso da norma.
+                    Resolver 3 questões de coesão, coerência e norma-padrão.
                 </div>
 
                 <button class="btn-tactical" style="margin-top: auto;" onclick="iniciarFase(2)">
@@ -543,30 +543,30 @@
         </div>
     </div>
 
-    <!-- TELA NARRATIVA 2: TRANSIÇÃO PARA A FASE 3 -->
+    <!-- TELA NARRATIVA 2: TRANSIÇÃO PARA A FASE 3 (Torre de Cristal) -->
     <div id="screen-story-2" class="screen">
         <div style="padding: 2px; flex: 1; display: flex; flex-direction: column;">
             <div class="tactical-card" style="flex: 1; display: flex; flex-direction: column;">
-                <div class="tactical-subtitle" style="color: var(--tactical-green);">[✓] FASE 2 CONCLUÍDA // ESTRUTURA RECONSTRUÍDA</div>
+                <div class="tactical-subtitle" style="color: var(--tactical-green);">[✓] FASE 2 CONCLUÍDA // MARGEM PURIFICADA</div>
 
-                <div class="ai-image-container" style="height: 130px;" onclick="openImageModal(document.getElementById('img-story-2').src)">
-                    <!-- Imagem: Painéis Digitais e Vias Táticas de Recife -->
-                    <img id="img-story-2" src="https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=600&q=80" alt="Vias de Comunicação Urbana">
+                <div class="ai-image-container" style="height: 125px;" onclick="openImageModal(document.getElementById('img-story-2').src)">
+                    <!-- Imagem 2: Torre de Cristal -->
+                    <img id="img-story-2" src="https://iili.io/n5skh67.png" alt="Torre de Cristal no Parque das Esculturas">
                     <div class="ai-hud-overlay"></div>
-                    <div class="ai-badge">FASE 3 // LINGUAGEM VERBAL E VISUAL</div>
+                    <div class="ai-badge">FASE 3 // TRANSMISSOR NA TORRE DE CRISTAL</div>
                 </div>
 
-                <div class="tactical-title" style="font-size: 13px; color: var(--tactical-orange);">DECODIFICAÇÃO DE PAINÉIS TÁTICOS</div>
+                <div class="tactical-title" style="font-size: 13px; color: var(--tactical-orange);">PONTOS CEGOS DE LINGUAGEM MISTA</div>
                 <p style="font-size: 10px; color: #cbd5e1; line-height: 1.35; margin-bottom: 6px;">
-                    Sinais de rádio no ar! Agora, os painéis das pontes e vias contêm charges, imagens e gráficos adulterados pela I.A.
+                    Localizámos o retransmissor da I.A.! Está no topo da Torre de Cristal, projetando imagens, charges e ironias adulteradas para o mar.
                 </p>
 
-                <div class="tactical-line">Analise o humor, a ironia e os recursos visuais das imagens.</div>
-                <div class="tactical-line">Resolva 3 desafios de linguagem mista para destravar as rotas.</div>
+                <div class="tactical-line">Decodifique os recursos não verbais e multissemióticos.</div>
+                <div class="tactical-line">Resolva 3 desafios visuais para neutralizar a antena.</div>
 
                 <div class="tactical-box" style="border-color: var(--tactical-orange);">
                     <strong>OBJETIVO FASE 3:</strong><br>
-                    Resolver 3 desafios de linguagem não verbal e multissemiótica.
+                    Resolver 3 desafios de linguagem mista, imagens e cartuns.
                 </div>
 
                 <button class="btn-tactical" style="margin-top: auto;" onclick="iniciarFase(3)">
@@ -580,30 +580,30 @@
         </div>
     </div>
 
-    <!-- TELA NARRATIVA 3: TRANSIÇÃO PARA A QUESTÃO FINAL -->
+    <!-- TELA NARRATIVA 3: TRANSIÇÃO PARA A QUESTÃO FINAL (Marco Zero) -->
     <div id="screen-story-3" class="screen">
         <div style="padding: 2px; flex: 1; display: flex; flex-direction: column;">
             <div class="tactical-card" style="flex: 1; display: flex; flex-direction: column;">
-                <div class="tactical-subtitle" style="color: var(--pe-yellow);">[!] ALERTA FINAL // NÚCLEO DA I.A.</div>
+                <div class="tactical-subtitle" style="color: var(--pe-yellow);">[!] ALERTA CRÍTICO // MARCO ZERO DE RECIFE</div>
 
-                <div class="ai-image-container" style="height: 130px;" onclick="openImageModal(document.getElementById('img-story-3').src)">
-                    <!-- Imagem: Servidor Central Futurista em Recife -->
-                    <img id="img-story-3" src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80" alt="Núcleo de Inteligência Artificial">
+                <div class="ai-image-container" style="height: 125px;" onclick="openImageModal(document.getElementById('img-story-3').src)">
+                    <!-- Imagem 5: Marco Zero Rosa dos Ventos -->
+                    <img id="img-story-3" src="https://iili.io/n5s8q5g.png" alt="Praça do Marco Zero em Recife">
                     <div class="ai-hud-overlay"></div>
-                    <div class="ai-badge">FASE FINAL // CONFRONTO LINGUÍSTICO</div>
+                    <div class="ai-badge">FASE FINAL // O NÚCLEO NO MARCO ZERO</div>
                 </div>
 
-                <div class="tactical-title" style="font-size: 13px; color: var(--pe-red);">CONFRONTO FINAL COM A I.A.</div>
+                <div class="tactical-title" style="font-size: 13px; color: var(--pe-red);">DESENLACE NA ROSA DOS VENTOS</div>
                 <p style="font-size: 10px; color: #cbd5e1; line-height: 1.35; margin-bottom: 6px;">
-                    Chegamos ao Servidor Central em Recife! A I.A. criou uma última barreira de ambiguidade textual.
+                    Chegámos ao coração geográfico de Recife! O vírus concentrou a sua última tese ambígua no centro da Rosa dos Ventos.
                 </p>
 
                 <div class="tactical-line">Resta apenas UMA QUESTÃO CRÍTICA.</div>
-                <div class="tactical-line">Identifique a tese/intenção exata do autor para neutralizar o vírus!</div>
+                <div class="tactical-line">Identifique a tese e a intenção do autor para restaurar a cidade!</div>
 
                 <div class="tactical-box" style="border-color: var(--pe-red); background: rgba(206, 17, 38, 0.1);">
-                    <strong>DECISÃO FINAL:</strong><br>
-                    Acerte a última questão de Português para restaurar os dados de Pernambuco!
+                    <strong>CONFRONTO FINAL:</strong><br>
+                    Acerte a última questão de Português para libertar Pernambuco!
                 </div>
 
                 <button class="btn-tactical" style="margin-top: auto; background: linear-gradient(135deg, #ce1126 0%, #800000 100%);" onclick="iniciarFase(4)">
@@ -627,7 +627,7 @@
                 </div>
 
                 <div class="ai-image-container" style="height: 100px;" onclick="openImageModal(document.getElementById('img-questao').src)">
-                    <img id="img-questao" src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80" alt="Terminal Cyberpunk">
+                    <img id="img-questao" src="https://iili.io/n5se0XV.png" alt="Imagem da Questão">
                     <div class="ai-hud-overlay"></div>
                     <div class="ai-badge">🔍 CLIQUE PARA AMPLIAR</div>
                 </div>
@@ -669,7 +669,7 @@
 
                     <p style="font-size: 9.5px; color: #cbd5e1; line-height: 1.35; margin-top: 4px;">
                         <strong>DESFECHO DA MISSÃO:</strong><br>
-                        O vírus da desinformação foi destruído! Os textos de Pernambuco foram totalmente restaurados graças ao seu domínio de Português!
+                        O vírus foi erradicado! A comunicação em Recife e Pernambuco foi restaurada com o seu excelente domínio da Língua Portuguesa!
                     </p>
 
                     <div class="print-alert-tactical">
@@ -728,9 +728,7 @@
                 bancoQuestoes = data.filter(q => q.enunciado && String(q.enunciado).trim() !== "");
                 
                 if (bancoQuestoes.length > 0) {
-                    // Embaralha todas as questões do Google Sheets
                     bancoQuestoes.sort(() => Math.random() - 0.5);
-                    // Garante que APENAS 10 questões sejam usadas por jogo
                     bancoQuestoes = bancoQuestoes.slice(0, 10);
                 } else {
                     exibirErro("PLANILHA VAZIA", "Nenhuma questão válida foi encontrada nas linhas da planilha.");
@@ -768,7 +766,7 @@
         if (q.imagem_url && String(q.imagem_url).trim() !== "") {
             document.getElementById('img-questao').src = q.imagem_url;
         } else {
-            document.getElementById('img-questao').src = "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80";
+            document.getElementById('img-questao').src = "https://iili.io/n5se0XV.png";
         }
 
         document.getElementById('btn-opt-a').textContent = `A) ${q.opcao_a || ''}`;
@@ -804,16 +802,15 @@
 
         questaoAtualIndex++;
 
-        // FLUXO RIGOROSO DE 10 QUESTÕES (3 + 3 + 3 + 1):
         if (questaoAtualIndex === 3) {
-            switchTab('screen-story-1'); // Transição para Fase 2
+            switchTab('screen-story-1');
         } else if (questaoAtualIndex === 6) {
-            switchTab('screen-story-2'); // Transição para Fase 3
+            switchTab('screen-story-2');
         } else if (questaoAtualIndex === 9) {
-            switchTab('screen-story-3'); // Transição para Fase Final (10ª questão)
+            switchTab('screen-story-3');
         } else if (questaoAtualIndex >= 10 || questaoAtualIndex >= bancoQuestoes.length) {
             document.getElementById('txt-score').textContent = pontosAcumulados;
-            switchTab('screen-result'); // Desfecho do Jogo na 10ª questão
+            switchTab('screen-result');
         } else {
             exibirQuestaoAtual();
         }
