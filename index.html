@@ -5,11 +5,11 @@
         // =========================================================
         // 🔗 COLE O SEU LINK DO GOOGLE APPS SCRIPT ENTRE AS ASPAS ABAIXO:
         // =========================================================
-        const SHEETS_API_URL = "https://script.google.com/macros/s/AKfycbzLKwX0dZN-WfLjdTLBAAUyksZooSSCZGXqY-j5yBXmItZ4oIqPstrunqlCtfkBCG95_g/exec";
+        const SHEETS_API_URL = "https://script.google.com/macros/s/AKfycby9OTJURr0_ipwDvwjY-G8GZ1rgkMIs5AHcuP3jmv6PLaUhRASAYYsyGgh61755adQUYw/exec";
     </script>
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Desafio SAEPE - Esquadrão Tático IA</title>
     
     <style>
@@ -36,43 +36,44 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        html {
+        html, body {
+            width: 100%;
+            height: 100%;
+            height: 100vh;
+            height: 100svh;
             background-color: var(--tactical-dark);
-            color: var(--text-light);
+            overflow: hidden;
         }
 
         body {
-            min-height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: flex-start;
-            background-color: var(--tactical-dark);
+            align-items: center;
         }
 
-        /* 📱 ESTRUTURA FLUIDA COM SCROLL NATURAL PARA CELULAR */
         .mobile-device {
-            width: 100%;
+            width: 100vw;
+            height: 100vh;
+            height: 100svh;
             max-width: 500px;
-            min-height: 100vh;
             background: var(--tactical-dark);
             display: flex;
             flex-direction: column;
             position: relative;
-            padding-bottom: 40px;
+            overflow: hidden;
         }
 
-        /* 💻 DESIGN CENTRALIZADO PARA MONITORES/PC */
-        @media screen and (min-width: 1025px) {
+        @media screen and (min-width: 1025px) and (pointer: fine) {
             body {
                 background-color: #020408;
-                padding: 20px 0;
+                padding: 10px;
             }
             .mobile-device {
-                min-height: auto;
+                height: 92vh;
+                max-height: 850px;
                 border-radius: 16px;
-                box-shadow: 0 0 40px rgba(0, 0, 0, 0.9);
+                box-shadow: 0 0 50px rgba(0, 0, 0, 0.95);
                 border: 2px solid #1e293b;
-                overflow: hidden;
             }
         }
 
@@ -80,27 +81,31 @@
             height: 36px;
             background: #040609;
             color: var(--tactical-amber);
-            font-size: 12px;
+            font-size: 11px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 16px;
+            padding: 0 14px;
             font-family: monospace;
             font-weight: bold;
             border-bottom: 1px solid #1e293b;
+            flex-shrink: 0;
         }
 
         .rainbow-bar {
             height: 4px;
             width: 100%;
             background: linear-gradient(90deg, var(--pe-red) 0%, var(--pe-yellow) 50%, var(--pe-blue) 100%);
+            flex-shrink: 0;
         }
 
         .screen {
             display: none;
-            padding: 16px;
+            flex: 1;
             flex-direction: column;
-            gap: 16px;
+            padding: 12px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .screen.active {
@@ -109,25 +114,26 @@
 
         .tactical-card {
             background: var(--tactical-panel);
-            border: 1px solid var(--tactical-border);
+            border: 1.5px solid var(--tactical-border);
             border-radius: 12px;
-            padding: 18px;
+            padding: 14px;
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 12px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            min-height: min-content;
         }
 
-        /* IMAGEM COM ALTURA ADEQUADA */
         .ai-image-container {
             width: 100%;
-            height: 180px;
+            height: 160px;
             background: #000;
             border: 1px solid var(--tactical-orange);
             border-radius: 8px;
             position: relative;
             overflow: hidden;
             cursor: pointer;
+            flex-shrink: 0;
         }
 
         .ai-image-container img {
@@ -139,31 +145,29 @@
 
         .ai-badge {
             position: absolute;
-            bottom: 8px;
-            left: 8px;
+            bottom: 6px;
+            left: 6px;
             background: rgba(0, 0, 0, 0.85);
             border: 1px solid var(--tactical-orange);
             color: var(--tactical-amber);
-            font-size: 11px;
+            font-size: 10px;
             font-family: monospace;
-            padding: 4px 8px;
+            padding: 3px 6px;
             border-radius: 4px;
             font-weight: bold;
         }
 
-        /* TÍTULOS E TEXTOS AMPLIADOS PARA FÁCIL LEITURA */
         .tactical-title {
             color: var(--text-light);
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
             line-height: 1.2;
         }
 
         .tactical-subtitle {
             color: var(--tactical-orange);
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
             text-transform: uppercase;
             font-family: monospace;
@@ -171,19 +175,19 @@
 
         .tactical-line {
             color: var(--text-dim);
-            font-size: 15px;
+            font-size: 14px;
             line-height: 1.4;
             display: flex;
             align-items: flex-start;
-            gap: 8px;
+            gap: 6px;
         }
 
         .tactical-box {
             border: 1px dashed var(--tactical-amber);
             background: rgba(255, 170, 0, 0.08);
-            padding: 12px;
+            padding: 10px;
             color: var(--text-light);
-            font-size: 14px;
+            font-size: 13px;
             line-height: 1.4;
             border-radius: 6px;
         }
@@ -191,16 +195,16 @@
         .commander-input-box {
             background: rgba(255, 170, 0, 0.05);
             border: 1.5px solid var(--tactical-amber);
-            padding: 14px;
+            padding: 12px;
             border-radius: 8px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
         }
 
         .commander-label {
             color: var(--tactical-amber);
-            font-size: 13px;
+            font-size: 12px;
             font-weight: bold;
             font-family: monospace;
         }
@@ -210,29 +214,23 @@
             background: #000;
             border: 1.5px solid var(--tactical-amber);
             color: #00ff66;
-            padding: 14px;
-            font-size: 16px;
+            padding: 12px;
+            font-size: 15px;
             font-weight: bold;
             outline: none;
             border-radius: 6px;
             font-family: monospace;
         }
 
-        .input-tactical-highlight::placeholder {
-            color: rgba(255, 170, 0, 0.5);
-            font-size: 13px;
-        }
-
-        /* BOTÕES DE AÇÃO LARGOS E ALTOS (FÁCEIS DE CLICAR) */
         .btn-tactical {
             width: 100%;
-            min-height: 52px;
-            padding: 14px 16px;
+            min-height: 50px;
+            padding: 12px 16px;
             background: linear-gradient(135deg, #e64a00 0%, #991b00 100%);
             color: #ffffff;
             border: none;
             font-weight: 800;
-            font-size: 16px;
+            font-size: 15px;
             text-transform: uppercase;
             cursor: pointer;
             border-radius: 8px;
@@ -241,38 +239,37 @@
             justify-content: center;
             align-items: center;
             gap: 8px;
+            flex-shrink: 0;
         }
 
-        /* CARD DA QUESTÃO AMPLIADO */
         .question-card-tactical {
             background: #06090e;
             border: 1px solid var(--tactical-gray);
             border-left: 4px solid var(--tactical-amber);
-            padding: 14px;
+            padding: 12px;
             color: #ffffff;
-            font-size: 16px;
-            line-height: 1.5;
+            font-size: 15px;
+            line-height: 1.45;
             border-radius: 6px;
         }
 
-        /* ALTERNATIVAS DE RESPOSTA GRANDES */
         .options-tactical {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
         }
 
         .opt-btn-tactical {
             background: rgba(15, 23, 42, 0.8);
             border: 1.5px solid #334155;
             color: #ffffff;
-            padding: 14px 16px;
+            padding: 12px 14px;
             text-align: left;
-            font-size: 15px;
-            line-height: 1.4;
+            font-size: 14px;
+            line-height: 1.35;
             cursor: pointer;
             border-radius: 8px;
-            min-height: 50px;
+            min-height: 48px;
             display: flex;
             align-items: center;
         }
@@ -293,18 +290,18 @@
             text-align: center;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
 
         .student-name-tactical {
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 800;
             color: #fff;
             text-transform: uppercase;
         }
 
         .score-display-tactical {
-            font-size: 42px;
+            font-size: 38px;
             font-weight: 900;
             color: var(--tactical-amber);
             font-family: monospace;
@@ -316,32 +313,33 @@
             background: var(--tactical-orange);
             color: #000;
             font-weight: 800;
-            font-size: 12px;
+            font-size: 11px;
             border-radius: 4px;
         }
 
         .print-alert-tactical {
             background: rgba(255, 85, 0, 0.1);
             border: 1px dashed var(--tactical-orange);
-            padding: 12px;
+            padding: 10px;
             border-radius: 6px;
-            font-size: 13px;
+            font-size: 12px;
             color: var(--tactical-amber);
             font-weight: bold;
-            line-height: 1.4;
+            line-height: 1.35;
         }
 
         .credits-footer {
             width: 100%;
-            padding: 12px;
+            padding: 8px 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 11px;
+            font-size: 10px;
             color: var(--text-dim);
             font-family: monospace;
             border-top: 1px solid #1e293b;
-            margin-top: auto;
+            background: #030508;
+            flex-shrink: 0;
         }
 
         .image-modal {
@@ -398,20 +396,20 @@
     <div id="screen-cover" class="screen active">
         <div class="tactical-card">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 11px; font-weight: 800; color: #fff; background: var(--pe-blue); padding: 3px 8px; border-radius: 4px;">SAEPE PE</span>
-                <span style="font-size: 11px; color: var(--tactical-amber); font-family: monospace; font-weight: bold;">DEFCON 1</span>
+                <span style="font-size: 10px; font-weight: 800; color: #fff; background: var(--pe-blue); padding: 3px 8px; border-radius: 4px;">SAEPE PE</span>
+                <span style="font-size: 10px; color: var(--tactical-amber); font-family: monospace; font-weight: bold;">DEFCON 1</span>
             </div>
 
             <div class="ai-image-container" onclick="openImageModal(document.getElementById('img-cover').src)">
                 <img id="img-cover" src="https://iili.io/n5se0XV.png" alt="Letreiro Recife">
-                <div class="ai-badge">📍 TOQUE PARA AMPLIAR A IMAGEM</div>
+                <div class="ai-badge">🔍 TOQUE PARA AMPLIAR IMAGEM</div>
             </div>
 
             <div class="tactical-title">ESQUADRÃO SAEPE</div>
             <div class="tactical-subtitle">OPERAÇÃO: DECODIFICAÇÃO DE TEXTOS</div>
 
-            <div class="tactical-line"> Uma I.A. infectou o sistema de informações de Recife.</div>
-            <div class="tactical-line"> Os painéis da cidade foram adulterados com erros linguísticos!</div>
+            <div class="tactical-line">Uma I.A. infectou o sistema de informações de Recife.</div>
+            <div class="tactical-line">Os painéis da cidade foram adulterados com erros linguísticos!</div>
 
             <div class="commander-input-box">
                 <label class="commander-label">[!] NOME DO COMANDANTE:</label>
@@ -422,13 +420,9 @@
                 <span>ASSUMIR COMANDO</span> ➔
             </button>
         </div>
-        <div class="credits-footer">
-            <span style="color: var(--tactical-orange); font-weight: bold;">janakirschner (beta)</span>
-            <span>CC BY 4.0</span>
-        </div>
     </div>
 
-    <!-- TELA NARRATIVA 0: BRIEFING -->
+    <!-- TELA NARRATIVA 0 -->
     <div id="screen-story-0" class="screen">
         <div class="tactical-card">
             <div class="tactical-subtitle">[!] FASE 1 // RECONHECIMENTO</div>
@@ -439,7 +433,7 @@
             </div>
 
             <div class="tactical-title">MAPEAMENTO DO CAPIBARIBE</div>
-            <p style="font-size: 15px; color: var(--text-dim); line-height: 1.4;">
+            <p style="font-size: 14px; color: var(--text-dim); line-height: 1.4;">
                 Do alto, identificamos que as pontes sobre o Rio Capibaribe estão com as transmissões bloqueadas por ruídos textuais.
             </p>
 
@@ -451,10 +445,6 @@
             <button class="btn-tactical" onclick="iniciarFase(1)">
                 <span>INICIAR FASE 1</span> ➔
             </button>
-        </div>
-        <div class="credits-footer">
-            <span style="color: var(--tactical-orange); font-weight: bold;">janakirschner (beta)</span>
-            <span>CC BY 4.0</span>
         </div>
     </div>
 
@@ -469,7 +459,7 @@
             </div>
 
             <div class="tactical-title">RUA DA AURORA</div>
-            <p style="font-size: 15px; color: var(--text-dim); line-height: 1.4;">
+            <p style="font-size: 14px; color: var(--text-dim); line-height: 1.4;">
                 Avançamos para a margem do rio! Corrija os problemas de pontuação e coesão nos edifícios da Aurora.
             </p>
 
@@ -481,10 +471,6 @@
             <button class="btn-tactical" onclick="iniciarFase(2)">
                 <span>AVANÇAR PARA FASE 2</span> ➔
             </button>
-        </div>
-        <div class="credits-footer">
-            <span style="color: var(--tactical-orange); font-weight: bold;">janakirschner (beta)</span>
-            <span>CC BY 4.0</span>
         </div>
     </div>
 
@@ -499,7 +485,7 @@
             </div>
 
             <div class="tactical-title">TORRE DE CRISTAL</div>
-            <p style="font-size: 15px; color: var(--text-dim); line-height: 1.4;">
+            <p style="font-size: 14px; color: var(--text-dim); line-height: 1.4;">
                 O retransmissor da I.A. está emitindo cartuns e imagens distorcidas a partir do topo da torre.
             </p>
 
@@ -511,10 +497,6 @@
             <button class="btn-tactical" onclick="iniciarFase(3)">
                 <span>AVANÇAR PARA FASE 3</span> ➔
             </button>
-        </div>
-        <div class="credits-footer">
-            <span style="color: var(--tactical-orange); font-weight: bold;">janakirschner (beta)</span>
-            <span>CC BY 4.0</span>
         </div>
     </div>
 
@@ -529,7 +511,7 @@
             </div>
 
             <div class="tactical-title">MARCO ZERO</div>
-            <p style="font-size: 15px; color: var(--text-dim); line-height: 1.4;">
+            <p style="font-size: 14px; color: var(--text-dim); line-height: 1.4;">
                 O vírus concentrou sua última tese ambígua no centro da Rosa dos Ventos.
             </p>
 
@@ -542,28 +524,24 @@
                 <span>ENFRENTAR QUESTÃO FINAL</span> ➔
             </button>
         </div>
-        <div class="credits-footer">
-            <span style="color: var(--tactical-orange); font-weight: bold;">janakirschner (beta)</span>
-            <span>CC BY 4.0</span>
-        </div>
     </div>
 
     <!-- TELA DE GAMEPLAY (QUESTÕES) -->
     <div id="screen-game" class="screen">
         <div class="tactical-card">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span id="txt-setor" style="font-size: 12px; color: var(--tactical-green); font-family: monospace; font-weight: bold;">FASE 1</span>
-                <span id="txt-contador" style="font-size: 12px; color: var(--tactical-amber); font-family: monospace; font-weight: bold;">Q 01 / 10</span>
+                <span id="txt-setor" style="font-size: 11px; color: var(--tactical-green); font-family: monospace; font-weight: bold;">FASE 1</span>
+                <span id="txt-contador" style="font-size: 11px; color: var(--tactical-amber); font-family: monospace; font-weight: bold;">Q 01 / 10</span>
             </div>
 
-            <div class="ai-image-container" style="height: 140px;" onclick="openImageModal(document.getElementById('img-questao').src)">
+            <div class="ai-image-container" style="height: 130px;" onclick="openImageModal(document.getElementById('img-questao').src)">
                 <img id="img-questao" src="https://iili.io/n5se0XV.png" alt="Imagem da Questão">
                 <div class="ai-badge">🔍 TOQUE PARA AMPLIAR IMAGEM</div>
             </div>
 
             <div class="question-card-tactical">
-                <strong id="txt-descritor" style="color: var(--tactical-orange); font-family: monospace; display: block; margin-bottom: 6px;">[CARREGANDO...]</strong>
-                <span id="txt-enunciado">Buscando dados da planilha...</span>
+                <strong id="txt-descritor" style="color: var(--tactical-orange); font-family: monospace; display: block; margin-bottom: 4px;">[CARREGANDO CONEXÃO...]</strong>
+                <span id="txt-enunciado">Conectando ao banco de dados tático...</span>
             </div>
 
             <div class="options-tactical">
@@ -577,10 +555,6 @@
                 <span>CONFIRMAR RESPOSTA</span> ➔
             </button>
         </div>
-        <div class="credits-footer">
-            <span style="color: var(--tactical-orange); font-weight: bold;">janakirschner (beta)</span>
-            <span>CC BY 4.0</span>
-        </div>
     </div>
 
     <!-- TELA FINAL -->
@@ -588,13 +562,13 @@
         <div class="tactical-card">
             <div class="result-card-tactical">
                 <div class="student-name-tactical" id="display-name">NOME DO ALUNO</div>
-                <div style="font-size: 12px; color: var(--text-dim); font-family: monospace;">COMPROVANTE DE CONCLUSÃO</div>
+                <div style="font-size: 11px; color: var(--text-dim); font-family: monospace;">COMPROVANTE DE CONCLUSÃO</div>
                 
-                <div class="score-display-tactical"><span id="txt-score">0</span> <span style="font-size: 16px; color: var(--text-dim);">PTS</span></div>
+                <div class="score-display-tactical"><span id="txt-score">0</span> <span style="font-size: 15px; color: var(--text-dim);">PTS</span></div>
 
                 <div class="badge-tactical" id="txt-medalha">MESTRE EM LÍNGUA PORTUGUESA 🏆</div>
 
-                <p style="font-size: 14px; color: var(--text-dim); line-height: 1.4;">
+                <p style="font-size: 13px; color: var(--text-dim); line-height: 1.4;">
                     O vírus foi erradicado! A comunicação foi restaurada com o seu domínio da Língua Portuguesa!
                 </p>
 
@@ -608,14 +582,14 @@
                 <span>RECOMEÇAR JOGO</span>
             </button>
         </div>
-        <div class="credits-footer">
-            <span style="color: var(--tactical-orange); font-weight: bold;">janakirschner (beta)</span>
-            <span>CC BY 4.0</span>
-        </div>
+    </div>
+
+    <div class="credits-footer">
+        <span style="color: var(--tactical-orange); font-weight: bold;">janakirschner (beta)</span>
+        <span>CC BY 4.0</span>
     </div>
 </div>
 
-<!-- MODAL PARA EXIBIR IMAGEM AMPLIADA -->
 <div id="modal-image-view" class="image-modal" onclick="closeImageModal()">
     <img id="modal-img-src" src="" alt="Imagem Ampliada">
     <button class="close-modal-btn" onclick="closeImageModal()">✕ FECHAR</button>
@@ -640,29 +614,45 @@
 
     async function carregarDadosPlanilha() {
         if (!SHEETS_API_URL || SHEETS_API_URL === "COLE_SEU_LINK_AQUI" || SHEETS_API_URL.trim() === "") {
-            exibirErro("LINK NÃO CONFIGURADO", "O link do Google Apps Script não foi colado no código.");
+            exibirErro("LINK NÃO CONFIGURADO", "Cole o link do Google Apps Script na linha 8 do código.");
             return;
         }
 
         try {
-            const response = await fetch(SHEETS_API_URL);
-            if (!response.ok) throw new Error("Erro de conexão");
+            // Adicionado suporte a redirecionamentos do Google Apps Script
+            const response = await fetch(SHEETS_API_URL, { redirect: "follow" });
+            if (!response.ok) throw new Error("Erro de resposta HTTP: " + response.status);
+            
             const data = await response.json();
 
             if (Array.isArray(data) && data.length > 0) {
-                bancoQuestoes = data.filter(q => q.enunciado && String(q.enunciado).trim() !== "");
+                // Filtra apenas linhas com enunciado preenchido
+                bancoQuestoes = data.filter(q => {
+                    const texto = q.enunciado || q["enunciado"] || q["ENUNCIADO"];
+                    return texto && String(texto).trim() !== "";
+                });
+
                 if (bancoQuestoes.length > 0) {
                     bancoQuestoes.sort(() => Math.random() - 0.5);
                     bancoQuestoes = bancoQuestoes.slice(0, 10);
+                    exibirQuestaoAtual();
                 } else {
-                    exibirErro("PLANILHA VAZIA", "Nenhuma questão válida encontrada.");
+                    exibirErro("PLANILHA VAZIA", "Nenhuma questão encontrada. Verifique os cabeçalhos da planilha.");
                 }
             } else {
-                exibirErro("FORMATO INVÁLIDO", "Resposta da planilha inválida.");
+                exibirErro("FORMATO INVÁLIDO", "Os dados retornados não estão no formato de lista.");
             }
         } catch (error) {
-            exibirErro("FALHA DE CONEXÃO", "Não foi possível carregar os dados.");
+            console.error("Erro na busca:", error);
+            exibirErro("FALHA NA PLANILHA", "Não foi possível ler os dados. Certifique-se de que a permissão está como 'Qualquer pessoa'.");
         }
+    }
+
+    function getItem(obj, keys) {
+        for (let k of keys) {
+            if (obj[k] !== undefined && obj[k] !== null) return obj[k];
+        }
+        return '';
     }
 
     function exibirErro(titulo, mensagem) {
@@ -681,21 +671,22 @@
         document.getElementById('txt-setor').textContent = `FASE ${faseAtual} // OPERAÇÃO ${questaoAtualIndex + 1}`;
         document.getElementById('txt-contador').textContent = `Q ${String(questaoAtualIndex + 1).padStart(2, '0')} / 10`;
         
-        const descritorTexto = q.descritor_codigo ? String(q.descritor_codigo).trim() : 'SAEPE';
+        const descritorTexto = getItem(q, ['descritor_codigo', 'descritor', 'codigo']) || 'SAEPE';
         document.getElementById('txt-descritor').textContent = `[DESCRITOR ${descritorTexto}]`;
         
-        document.getElementById('txt-enunciado').textContent = q.enunciado;
+        document.getElementById('txt-enunciado').textContent = getItem(q, ['enunciado', 'questao']);
         
-        if (q.imagem_url && String(q.imagem_url).trim() !== "") {
-            document.getElementById('img-questao').src = q.imagem_url;
+        const img = getItem(q, ['imagem_url', 'imagem', 'url']);
+        if (img && String(img).trim() !== "") {
+            document.getElementById('img-questao').src = img;
         } else {
             document.getElementById('img-questao').src = "https://iili.io/n5se0XV.png";
         }
 
-        document.getElementById('btn-opt-a').textContent = `A) ${q.opcao_a || ''}`;
-        document.getElementById('btn-opt-b').textContent = `B) ${q.opcao_b || ''}`;
-        document.getElementById('btn-opt-c').textContent = `C) ${q.opcao_c || ''}`;
-        document.getElementById('btn-opt-d').textContent = `D) ${q.opcao_d || ''}`;
+        document.getElementById('btn-opt-a').textContent = `A) ${getItem(q, ['opcao_a', 'a', 'opçao_a'])}`;
+        document.getElementById('btn-opt-b').textContent = `B) ${getItem(q, ['opcao_b', 'b', 'opçao_b'])}`;
+        document.getElementById('btn-opt-c').textContent = `C) ${getItem(q, ['opcao_c', 'c', 'opçao_c'])}`;
+        document.getElementById('btn-opt-d').textContent = `D) ${getItem(q, ['opcao_d', 'd', 'opçao_d'])}`;
 
         document.querySelectorAll('.opt-btn-tactical').forEach(b => b.classList.remove('selected'));
         respostaSelecionada = "";
@@ -709,7 +700,7 @@
 
     function proximaQuestao() {
         if (bancoQuestoes.length === 0) {
-            alert("Verifique a configuração da planilha.");
+            alert("Não há questões carregadas.");
             return;
         }
 
@@ -719,8 +710,11 @@
         }
 
         const q = bancoQuestoes[questaoAtualIndex];
-        if (respostaSelecionada.toUpperCase() === String(q.resposta_correta || '').trim().toUpperCase()) {
-            pontosAcumulados += parseInt(q.pontos || 10);
+        const gabarito = getItem(q, ['resposta_correta', 'gabarito', 'resposta']);
+        const pts = getItem(q, ['pontos', 'ponto']) || 10;
+
+        if (respostaSelecionada.toUpperCase() === String(gabarito).trim().toUpperCase()) {
+            pontosAcumulados += parseInt(pts);
         }
 
         questaoAtualIndex++;
@@ -738,19 +732,21 @@
             exibirQuestaoAtual();
         }
 
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        const activeScreen = document.querySelector('.screen.active');
+        if (activeScreen) activeScreen.scrollTop = 0;
     }
 
     function iniciarFase(faseNum) {
         faseAtual = faseNum;
         exibirQuestaoAtual();
         switchTab('screen-game');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function switchTab(screenId) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById(screenId).classList.add('active');
+        const targetScreen = document.getElementById(screenId);
+        targetScreen.classList.add('active');
+        targetScreen.scrollTop = 0;
     }
 
     function startMission() {
@@ -767,12 +763,10 @@
         faseAtual = 1;
         carregarDadosPlanilha();
         switchTab('screen-story-0');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function reiniciarJogo() {
         switchTab('screen-cover');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 </script>
 
