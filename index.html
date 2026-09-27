@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <script>
+        // =========================================================
+        // 🔗 COLE O SEU LINK DO GOOGLE APPS SCRIPT ENTRE AS ASPAS ABAIXO:
+        // =========================================================
+        const SHEETS_API_URL = "COLE_SEU_LINK_AQUI";
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Desafio SAEPE - Esquadrão Tático IA</title>
+    <style>
+        :root {
+            --tactical-dark: #070a0f;
+            --tactical-panel: rgba(13, 19, 28, 0.94);
+            --tactical-orange: #ff5500;
+            --tactical-amber: #ffaa00;
+            --tactical-green: #00ff66;
+            --tactical-gray: #1e293b;
+            --tactical-border: rgba(255, 85, 0, 0.4);
+            --text-light: #f8fafc;
+            --text-dim: #94a3b8;
+            --pe-red: #ce1126;
+            --pe-yellow: #fcd116;
+            --pe-blue: #002b7f;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Trebuchet MS', 'Segoe UI', Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #020408;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .mobile-device {
+            width: 360px;
+            height: 640px;
+            background: var(--tactical-dark);
+            background-image: 
+                radial-gradient(rgba(255, 85, 0, 0.08) 1px, transparent 0),
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 16px 16px, 100% 4px;
+            border-radius: 28px;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.95), 0 0 0 12px #0a0f18;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #1e293b;
+        }
+
+        .status-bar {
+            height: 22px;
+            background: #040609;
+            color: var(--tactical-amber);
+            font-size: 9.5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 14px;
+            z-index: 10;
+            border-bottom: 1px solid #1e293b;
+            font-family: monospace;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .rainbow-bar {
+            height: 3px;
+            width: 100%;
+            background: linear-gradient(90deg, var(--pe-red) 0%, var(--pe-yellow) 50%, var(--pe-blue) 100%);
+            flex-shrink: 0;
+        }
+
+        .screen {
+            display: none;
+            flex: 1;
+            flex-direction: column;
+            overflow-y: auto;
+            position: relative;
+            padding-bottom: 26px;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        .tactical-card {
+            background: var(--tactical-panel);
+            border: 1px solid var(--tactical-border);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.8), inset 0 0 15px rgba(255, 85, 0, 0.05);
+            border-radius: 8px;
+            padding: 12px;
+            margin: 8px;
+            position: relative;
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
+        }
+
+        .tactical-card::before {
+            content: "AI_TACTICAL_HUD";
+            position: absolute;
+            top: 2px;
+            right: 8px;
+            font-size: 7.5px;
+            font-family: monospace;
+            color: var(--tactical-orange);
+            letter-spacing: 1px;
+            opacity: 0.7;
+        }
+
+        .ai-image-container {
+            width: 100%;
+            height: 120px;
+            background: #000;
+            border: 1px solid var(--tactical-orange);
+            border-radius: 6px;
+            margin-bottom: 10px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(255, 85, 0, 0.3);
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .ai-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .ai-hud-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none;
+            background: 
+                linear-gradient(rgba(255, 85, 0, 0.1) 1px, transparent 1px),
+                radial-gradient(circle, transparent 60%, rgba(0, 0, 0, 0.6) 100%);
+            background-size: 100% 4px, 100% 100%;
+        }
+
+        .ai-badge {
+            position: absolute;
+            bottom: 6px;
+            left: 6px;
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid var(--tactical-orange);
+            color: var(--tactical-amber);
+            font-size: 7.5px;
+            font-family: monospace;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .tactical-title {
+            color: var(--text-light);
+            font-size: 15px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 2px;
+        }
+
+        .tactical-subtitle {
+            color: var(--tactical-orange);
+            font-size: 9.5px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            font-family: monospace;
+        }
+
+        .tactical-line {
+            color: #cbd5e1;
+            font-size: 10.5px;
+            margin-bottom: 6px;
+            line-height: 1.35;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .tactical-line::before {
+            content: "◼";
+            color: var(--tactical-orange);
+            font-size: 8px;
+            margin-right: 6px;
+            margin-top: 2px;
+        }
+
+        .tactical-box {
+            border: 1px dashed var(--tactical-amber);
+            background: rgba(255, 170, 0, 0.05);
+            padding: 8px;
+            text-align: left;
+            margin: 8px 0;
+            color: var(--text-light);
+            font-size: 9.5px;
+            line-height: 1.3;
+            border-radius: 4px;
+        }
+
+        .commander-input-box {
+            background: rgba(255, 170, 0, 0.08);
+            border: 2px solid var(--tactical-amber);
+            box-shadow: 0 0 15px rgba(255, 170, 0, 0.25);
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 6px;
+        }
+
+        .commander-label {
+            color: var(--tactical-amber);
+            font-size: 10px;
+            font-weight: 900;
+            font-family: monospace;
+            display: block;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .input-tactical-highlight {
+            width: 100%;
+            background: #000;
+            border: 1px solid var(--tactical-amber);
+            color: #00ff66;
+            padding: 11px 12px;
+            font-size: 13px;
+            font-weight: bold;
+            outline: none;
+            border-radius: 4px;
+            box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.8);
+            font-family: monospace;
+        }
+
+        .input-tactical-highlight::placeholder {
+            color: rgba(255, 170, 0, 0.6);
+            font-size: 10.5px;
+            font-weight: normal;
+        }
+
+        .btn-tactical {
+            width: 100%;
+            padding: 11px;
+            background: linear-gradient(135deg, #d94100 0%, #801800 100%);
+            color: #fff;
+            border: none;
+            font-weight: 900;
+            font-size: 11.5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            margin-top: 8px;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .question-card-tactical {
+            background: #06090e;
+            border: 1px solid var(--tactical-gray);
+            border-left: 3px solid var(--tactical-amber);
+            padding: 10px;
+            margin-bottom: 8px;
+            color: #fff;
+            font-size: 10.5px;
+            line-height: 1.4;
+            border-radius: 4px;
+        }
+
+        .options-tactical {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .opt-btn-tactical {
+            background: rgba(10, 15, 22, 0.9);
+            border: 1px solid #1e293b;
+            color: var(--text-light);
+            padding: 9px 10px;
+            text-align: left;
+            font-size: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: 0.15s;
+        }
+
+        .opt-btn-tactical.selected {
+            background: rgba(255, 85, 0, 0.15);
+            border-color: var(--tactical-orange);
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .result-card-tactical {
+            background: #06090e;
+            border: 1px solid var(--tactical-orange);
+            border-radius: 6px;
+            padding: 12px;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .student-name-tactical {
+            font-size: 14px;
+            font-weight: 900;
+            color: #fff;
+            text-transform: uppercase;
+        }
+
+        .score-display-tactical {
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--tactical-amber);
+            margin: 4px 0;
+            font-family: monospace;
+        }
+
+        .badge-tactical {
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--tactical-orange);
+            color: #000;
+            font-weight: 900;
+            font-size: 9.5px;
+            border-radius: 2px;
+            margin-bottom: 8px;
+        }
+
+        .print-alert-tactical {
+            background: rgba(255, 85, 0, 0.1);
+            border: 1px dashed var(--tactical-orange);
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 9px;
+            color: var(--tactical-amber);
+            font-weight: bold;
+            margin-top: 8px;
+            line-height: 1.3;
+        }
+
+        .credits-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #030508;
+            border-top: 1px solid #1e293b;
+            padding: 4px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 8px;
+            color: var(--text-dim);
+            z-index: 20;
+            font-family: monospace;
+        }
+
+        .credits-author {
+            font-weight: 800;
+            color: var(--tactical-orange);
+        }
+
+        .image-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .image-modal.active {
+            display: flex;
+        }
+
+        .image-modal img {
+            max-width: 95%;
+            max-height: 80vh;
+            border: 2px solid var(--tactical-orange);
+            border-radius: 8px;
+            box-shadow: 0 0 30px rgba(255, 85, 0, 0.5);
+            object-fit: contain;
+        }
+
+        .close-modal-btn {
+            margin-top: 15px;
+            background: var(--tactical-orange);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-weight: bold;
+            font-size: 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+
+<div class="mobile-device">
+    <div class="status-bar">
+        <span>TAC_OPS // PERNAMBUCO</span>
+        <span>RECIFE_ZONE 📍</span>
+    </div>
+
+    <div class="rainbow-bar"></div>
+
+    <!-- TELA 1: CAPA -->
+    <div id="screen-cover" class="screen active">
+        <div style="padding: 2px; flex: 1; display: flex; flex-direction: column;">
+            <div class="tactical-card" style="flex: 1; display: flex; flex-direction: column;">
+                
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
+                    <span style="font-size: 10px; font-weight: 900; color: #fff; background: var(--pe-blue); padding: 2px 6px; border-radius: 3px;">SAEPE PE</span>
+                    <span style="font-size: 8px; color: var(--tactical-amber); font-family: monospace; font-weight: bold;">DEFCON_1</span>
+                </div>
+
+                <div class="ai-image-container" onclick="openImageModal(document.getElementById('img-cover').src)">
+                    <img id="img-cover" src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80" alt="IA Core Server">
+                    <div class="ai-hud-overlay"></div>
+                    <div class="ai-badge">🔍 CLIQUE PARA AMPLIAR</div>
+                </div>
+
+                <div class="tactical-title">ESQUADRÃO SAEPE</div>
+                <div class="tactical-subtitle">ZONA DE OPERAÇÃO: PERNAMBUCO</div>
+
+                <div class="tactical-line">Uma I.A. fora de controle assumiu a rede de Pernambuco.</div>
+                <div class="tactical-line">As infraestruturas do Estado estão totalmente bloqueadas.</div>
+
+                <div class="commander-input-box" style="margin-top: auto;">
+                    <label class="commander-label">[!] IDENTIFICAÇÃO OBRIGATÓRIA DO COMANDANTE:</label>
+                    <input type="text" id="student-input" class="input-tactical-highlight" placeholder="DIGITE SEU NOME E SOBRENOME AQUI..." value="">
+                    <button class="btn-tactical" onclick="startMission()">
+                        <span>ASSUMIR COMANDO</span> ➔
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="credits-footer">
+            <span class="credits-author">powered by janakirschner (versão beta)</span>
+            <span>CC BY 4.0</span>
+        </div>
+    </div>
+
+    <!-- TELA NARRATIVA 0: INTRODUÇÃO DA MISSÃO -->
+    <div id="screen-story-0" class="screen">
+        <div style="padding: 2px; flex: 1; display: flex; flex-direction: column;">
+            <div class="tactical-card" style="flex: 1; display: flex; flex-direction: column;">
+                <div class="tactical-subtitle" style="color: var(--tactical-amber);">[!] BRIEFING DE INTEL // ALERTA MÁXIMO</div>
+
+                <div class="ai-image-container" style="height: 130px;" onclick="openImageModal(document.getElementById('img-story-0').src)">
+                    <img id="img-story-0" src="https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=600&q=80" alt="Rede Elétrica Desconectada">
+                    <div class="ai-hud-overlay"></div>
+                    <div class="ai-badge">FASE 1 // GERADORES DE ENERGIA</div>
+                </div>
+
+                <div class="tactical-title" style="font-size: 13px; color: var(--tactical-orange);">SITUAÇÃO CRÍTICA: APAGÃO TOTAL</div>
+                <p style="font-size: 10px; color: #cbd5e1; line-height: 1.35; margin-bottom: 6px;">
+                    Comandante! Uma I.A. desgovernada derrubou os sistemas elétricos do Estado. Estamos no escuro total.
+                </p>
+
+                <div class="tactical-line">Sua primeira missão é invadir a subestação de energia.</div>
+                <div class="tactical-line">Resolva os 3 cálculos de restauração para religar a força.</div>
+
+                <div class="tactical-box" style="border-color: var(--tactical-orange);">
+                    <strong>OBJETIVO FASE 1:</strong><br>
+                    Resolver 3 equações para religar os geradores centrais.
+                </div>
+
+                <button class="btn-tactical" style="margin-top: auto;" onclick="iniciarFase(1)">
+                    <span>INICIAR FASE 1 (3 QUESTÕES)</span> ➔
+                </button>
+            </div>
+        </div>
+        <div class="credits-footer">
+            <span class="credits-author">powered by janakirschner (versão beta)</span>
+            <span>CC BY 4.0</span>
+        </div>
+    </div>
+
+    <!-- TELA NARRATIVA 1: TRANSIÇÃO PARA A FASE 2 -->
+    <div id="screen-story-1" class="screen">
+        <div style="padding: 2px; flex: 1; display: flex; flex-direction: column;">
+            <div class="tactical-card" style="flex: 1; display: flex; flex-direction: column;">
+                <div class="tactical-subtitle" style="color: var(--tactical-green);">[✓] FASE 1 CONCLUÍDA // ENERGIA RESTAURADA</div>
+
+                <div class="ai-image-container" style="height: 130px;" onclick="openImageModal(document.getElementById('img-story-1').src)">
+                    <img id="img-story-1" src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=600&q=80" alt="Torre de Comunicação">
+                    <div class="ai-hud-overlay"></div>
+                    <div class="ai-badge">FASE 2 // REDE DE COMUNICAÇÕES</div>
+                </div>
+
+                <div class="tactical-title" style="font-size: 13px; color: var(--tactical-orange);">NOVO ALERTA: SINAL HACKEADO</div>
+                <p style="font-size: 10px; color: #cbd5e1; line-height: 1.35; margin-bottom: 6px;">
+                    Excelente trabalho! A luz voltou, mas a I.A. bloqueou as antenas de comunicação. O rádio das equipes está fora do ar.
+                </p>
+
+                <div class="tactical-line">Precisamos decodificar a frequência de emergência.</div>
+                <div class="tactical-line">Superar 3 desafios lógicos desbloqueará a transmissão.</div>
+
+                <div class="tactical-box" style="border-color: var(--tactical-amber);">
+                    <strong>OBJETIVO FASE 2:</strong><br>
+                    Resolver 3 questões para liberar os transmissores.
+                </div>
+
+                <button class="btn-tactical" style="margin-top: auto;" onclick="iniciarFase(2)">
+                    <span>AVANÇAR PARA FASE 2 (3 QUESTÕES)</span> ➔
+                </button>
+            </div>
+        </div>
+        <div class="credits-footer">
+            <span class="credits-author">powered by janakirschner (versão beta)</span>
+            <span>CC BY 4.0</span>
+        </div>
+    </div>
+
+    <!-- TELA NARRATIVA 2: TRANSIÇÃO PARA A FASE 3 -->
+    <div id="screen-story-2" class="screen">
+        <div style="padding: 2px; flex: 1; display: flex; flex-direction: column;">
+            <div class="tactical-card" style="flex: 1; display: flex; flex-direction: column;">
+                <div class="tactical-subtitle" style="color: var(--tactical-green);">[✓] FASE 2 CONCLUÍDA // CANAL REABERTO</div>
+
+                <div class="ai-image-container" style="height: 130px;" onclick="openImageModal(document.getElementById('img-story-2').src)">
+                    <img id="img-story-2" src="https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=600&q=80" alt="Ponte e Estradas Táticas">
+                    <div class="ai-hud-overlay"></div>
+                    <div class="ai-badge">FASE 3 // LOGÍSTICA DE TRANSPORTES</div>
+                </div>
+
+                <div class="tactical-title" style="font-size: 13px; color: var(--tactical-orange);">BLOQUEIO DAS ROTAS TÁTICAS</div>
+                <p style="font-size: 10px; color: #cbd5e1; line-height: 1.35; margin-bottom: 6px;">
+                    O sinal foi restabelecido! Porém, os semáforos e pontes móveis foram travados pela I.A. A tropa não consegue avançar pelas estradas.
+                </p>
+
+                <div class="tactical-line">Você deve calcular as rotas de desvio tático.</div>
+                <div class="tactical-line">Resolva mais 3 problemas de geometria e espaço.</div>
+
+                <div class="tactical-box" style="border-color: var(--tactical-orange);">
+                    <strong>OBJETIVO FASE 3:</strong><br>
+                    Resolver 3 desafios para liberar os caminhos e pontes.
+                </div>
+
+                <button class="btn-tactical" style="margin-top: auto;" onclick="iniciarFase(3)">
+                    <span>AVANÇAR PARA FASE 3 (3 QUESTÕES)</span> ➔
+                </button>
+            </div>
+        </div>
+        <div class="credits-footer">
+            <span class="credits-author">powered by janakirschner (versão beta)</span>
+            <span>CC BY 4.0</span>
+        </div>
+    </div>
+
+    <!-- TELA NARRATIVA 3: TRANSIÇÃO PARA A QUESTÃO FINAL -->
+    <div id="screen-story-3" class="screen">
+        <div style="padding: 2px; flex: 1; display: flex; flex-direction: column;">
+            <div class="tactical-card" style="flex: 1; display: flex; flex-direction: column;">
+                <div class="tactical-subtitle" style="color: var(--pe-yellow);">[!] ALERTA FINAL // NÚCLEO DA I.A.</div>
+
+                <div class="ai-image-container" style="height: 130px;" onclick="openImageModal(document.getElementById('img-story-3').src)">
+                    <img id="img-story-3" src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80" alt="Núcleo de Inteligência Artificial">
+                    <div class="ai-hud-overlay"></div>
+                    <div class="ai-badge">FASE FINAL // CONFRONTO DIRETO</div>
+                </div>
+
+                <div class="tactical-title" style="font-size: 13px; color: var(--pe-red);">CONFRONTO FINAL COM A I.A.</div>
+                <p style="font-size: 10px; color: #cbd5e1; line-height: 1.35; margin-bottom: 6px;">
+                    Chegamos ao Servidor Central em Recife! A I.A. ergueu seu último escudo de proteção lógica.
+                </p>
+
+                <div class="tactical-line">Resta apenas UMA QUESTÃO CRÍTICA.</div>
+                <div class="tactical-line">Um erro agora pode redefinir o bloqueio de todo o Estado!</div>
+
+                <div class="tactical-box" style="border-color: var(--pe-red); background: rgba(206, 17, 38, 0.1);">
+                    <strong>DECISÃO FINAL:</strong><br>
+                    Acerte a última questão para desativar a I.A. permanentemente!
+                </div>
+
+                <button class="btn-tactical" style="margin-top: auto; background: linear-gradient(135deg, #ce1126 0%, #800000 100%);" onclick="iniciarFase(4)">
+                    <span>ENFRENTAR QUESTÃO FINAL (1 QUESTÃO)</span> ➔
+                </button>
+            </div>
+        </div>
+        <div class="credits-footer">
+            <span class="credits-author">powered by janakirschner (versão beta)</span>
+            <span>CC BY 4.0</span>
+        </div>
+    </div>
+
+    <!-- TELA DE GAMEPLAY (QUESTÕES) -->
+    <div id="screen-game" class="screen">
+        <div style="padding: 2px; flex: 1; display: flex; flex-direction: column;">
+            <div class="tactical-card" style="flex: 1; display: flex; flex-direction: column;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <span id="txt-setor" style="font-size: 9px; color: var(--tactical-green); font-family: monospace; font-weight: bold;">SETOR TÁTICO // FASE 1</span>
+                    <span id="txt-contador" style="font-size: 9px; color: var(--tactical-amber); font-family: monospace; font-weight: bold;">Q 01 / 10</span>
+                </div>
+
+                <div class="ai-image-container" style="height: 100px;" onclick="openImageModal(document.getElementById('img-questao').src)">
+                    <img id="img-questao" src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80" alt="Terminal Cyberpunk">
+                    <div class="ai-hud-overlay"></div>
+                    <div class="ai-badge">🔍 CLIQUE PARA AMPLIAR</div>
+                </div>
+
+                <div class="question-card-tactical">
+                    <strong id="txt-descritor" style="color: var(--tactical-orange); font-family: monospace;">[CARREGANDO...]</strong><br>
+                    <span id="txt-enunciado">Buscando dados da planilha...</span>
+                </div>
+
+                <div class="options-tactical">
+                    <button class="opt-btn-tactical" id="btn-opt-a" onclick="selectOption(this, 'A')">A) Carregando...</button>
+                    <button class="opt-btn-tactical" id="btn-opt-b" onclick="selectOption(this, 'B')">B) Carregando...</button>
+                    <button class="opt-btn-tactical" id="btn-opt-c" onclick="selectOption(this, 'C')">C) Carregando...</button>
+                    <button class="opt-btn-tactical" id="btn-opt-d" onclick="selectOption(this, 'D')">D) Carregando...</button>
+                </div>
+
+                <button class="btn-tactical" style="margin-top: auto;" onclick="proximaQuestao()">
+                    <span>CONFIRMAR DECISÃO</span> ➔
+                </button>
+            </div>
+        </div>
+        <div class="credits-footer">
+            <span class="credits-author">powered by janakirschner (versão beta)</span>
+            <span>CC BY 4.0</span>
+        </div>
+    </div>
+
+    <!-- TELA FINAL: DESFECHO E RESULTADO -->
+    <div id="screen-result" class="screen">
+        <div style="padding: 2px; flex: 1; display: flex; flex-direction: column;">
+            <div class="tactical-card" style="flex: 1; display: flex; flex-direction: column; text-align: center;">
+                <div class="result-card-tactical">
+                    <div class="student-name-tactical" id="display-name">NOME DO ALUNO</div>
+                    <div style="font-size: 8.5px; color: var(--text-dim); font-family: monospace; margin-top: 2px;">COMPROVANTE OFICIAL DE OPERAÇÃO</div>
+                    
+                    <div class="score-display-tactical"><span id="txt-score">0</span> <span style="font-size: 14px; color: var(--text-dim);">PTS</span></div>
+
+                    <div class="badge-tactical" id="txt-medalha">COMANDANTE SUPREMO 🏆</div>
+
+                    <p style="font-size: 9.5px; color: #cbd5e1; line-height: 1.35; margin-top: 4px;">
+                        <strong>DESFECHO DA MISSÃO:</strong><br>
+                        A I.A. foi neutralizada! Pernambuco recuperou o controle dos seus sistemas e o esquadrão garantiu a vitória!
+                    </p>
+
+                    <div class="print-alert-tactical">
+                        📸 <strong>ATENÇÃO COMANDANTE!</strong><br>
+                        Tire um PRINT desta tela para comprovar a conclusão da missão ao seu professor!
+                    </div>
+                </div>
+
+                <button class="btn-tactical" style="margin-top: auto; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid var(--tactical-orange);" onclick="reiniciarJogo()">
+                    <span>REEXECUTAR OPERAÇÃO</span>
+                </button>
+            </div>
+        </div>
+        <div class="credits-footer">
+            <span class="credits-author">powered by janakirschner (versão beta)</span>
+            <span>CC BY 4.0</span>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL PARA EXIBIR IMAGEM AMPLIADA -->
+<div id="modal-image-view" class="image-modal" onclick="closeImageModal()">
+    <img id="modal-img-src" src="" alt="Imagem Ampliada">
+    <button class="close-modal-btn" onclick="closeImageModal()">✕ FECHAR IMAGEM</button>
+</div>
+
+<script>
+    let bancoQuestoes = [];
+    let questaoAtualIndex = 0;
+    let pontosAcumulados = 0;
+    let respostaSelecionada = "";
+    let faseAtual = 1;
+
+    function openImageModal(src) {
+        if (!src) return;
+        document.getElementById('modal-img-src').src = src;
+        document.getElementById('modal-image-view').classList.add('active');
+    }
+
+    function closeImageModal() {
+        document.getElementById('modal-image-view').classList.remove('active');
+    }
+
+    async function carregarDadosPlanilha() {
+        if (!SHEETS_API_URL || SHEETS_API_URL === "COLE_SEU_LINK_AQUI" || SHEETS_API_URL.trim() === "") {
+            exibirErro("LINK NÃO CONFIGURADO", "O link do Google Apps Script não foi colado na variável SHEETS_API_URL (linha 6).");
+            return;
+        }
+
+        try {
+            const response = await fetch(SHEETS_API_URL);
+            if (!response.ok) throw new Error("Erro na conexão com a URL (Status: " + response.status + ")");
+            const data = await response.json();
+
+            if (Array.isArray(data) && data.length > 0) {
+                bancoQuestoes = data.filter(q => q.enunciado && String(q.enunciado).trim() !== "");
+                
+                if (bancoQuestoes.length > 0) {
+                    bancoQuestoes.sort(() => Math.random() - 0.5);
+                } else {
+                    exibirErro("PLANILHA VAZIA", "Nenhuma questão válida foi encontrada nas linhas da planilha.");
+                }
+            } else {
+                exibirErro("FORMATO INVÁLIDO", "A resposta recebida do Google Sheets está vazia ou não é uma lista válida.");
+            }
+        } catch (error) {
+            console.error("Erro na integração:", error);
+            exibirErro("FALHA DE CONEXÃO", "Não foi possível conectar à planilha. Verifique se o Apps Script foi implantado para 'Qualquer pessoa' (Anyone).");
+        }
+    }
+
+    function exibirErro(titulo, mensagem) {
+        document.getElementById('txt-descritor').textContent = `[ERRO: ${titulo}]`;
+        document.getElementById('txt-enunciado').textContent = mensagem;
+        document.getElementById('btn-opt-a').textContent = "A) Indisponível";
+        document.getElementById('btn-opt-b').textContent = "B) Indisponível";
+        document.getElementById('btn-opt-c').textContent = "C) Indisponível";
+        document.getElementById('btn-opt-d').textContent = "D) Indisponível";
+    }
+
+    function exibirQuestaoAtual() {
+        if (bancoQuestoes.length === 0) return;
+        
+        const q = bancoQuestoes[questaoAtualIndex];
+        document.getElementById('txt-setor').textContent = `FASE ${faseAtual} // OPERAÇÃO ${questaoAtualIndex + 1}`;
+        document.getElementById('txt-contador').textContent = `Q ${String(questaoAtualIndex + 1).padStart(2, '0')} / ${bancoQuestoes.length}`;
+        
+        const descritorTexto = q.descritor_codigo ? String(q.descritor_codigo).trim() : 'SAEPE';
+        document.getElementById('txt-descritor').textContent = `[DESCRITOR ${descritorTexto}]`;
+        
+        document.getElementById('txt-enunciado').textContent = q.enunciado;
+        
+        if (q.imagem_url && String(q.imagem_url).trim() !== "") {
+            document.getElementById('img-questao').src = q.imagem_url;
+        } else {
+            document.getElementById('img-questao').src = "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80";
+        }
+
+        document.getElementById('btn-opt-a').textContent = `A) ${q.opcao_a || ''}`;
+        document.getElementById('btn-opt-b').textContent = `B) ${q.opcao_b || ''}`;
+        document.getElementById('btn-opt-c').textContent = `C) ${q.opcao_c || ''}`;
+        document.getElementById('btn-opt-d').textContent = `D) ${q.opcao_d || ''}`;
+
+        document.querySelectorAll('.opt-btn-tactical').forEach(b => b.classList.remove('selected'));
+        respostaSelecionada = "";
+    }
+
+    function selectOption(el, letra) {
+        document.querySelectorAll('.opt-btn-tactical').forEach(i => i.classList.remove('selected'));
+        el.classList.add('selected');
+        respostaSelecionada = letra;
+    }
+
+    function proximaQuestao() {
+        if (bancoQuestoes.length === 0) {
+            alert("Aguarde a conexão com a planilha ou corrija os erros de configuração.");
+            return;
+        }
+
+        if (!respostaSelecionada) {
+            alert("Selecione uma resposta antes de prosseguir!");
+            return;
+        }
+
+        const q = bancoQuestoes[questaoAtualIndex];
+        if (respostaSelecionada.toUpperCase() === String(q.resposta_correta || '').trim().toUpperCase()) {
+            pontosAcumulados += parseInt(q.pontos || 10);
+        }
+
+        questaoAtualIndex++;
+
+        if (questaoAtualIndex === 3) {
+            switchTab('screen-story-1');
+        } else if (questaoAtualIndex === 6) {
+            switchTab('screen-story-2');
+        } else if (questaoAtualIndex === 9) {
+            switchTab('screen-story-3');
+        } else if (questaoAtualIndex >= bancoQuestoes.length) {
+            document.getElementById('txt-score').textContent = pontosAcumulados;
+            switchTab('screen-result');
+        } else {
+            exibirQuestaoAtual();
+        }
+    }
+
+    function iniciarFase(faseNum) {
+        faseAtual = faseNum;
+        exibirQuestaoAtual();
+        switchTab('screen-game');
+    }
+
+    function switchTab(screenId) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(screenId).classList.add('active');
+    }
+
+    function startMission() {
+        const inputName = document.getElementById('student-input').value;
+        if (!inputName || inputName.trim() === "") {
+            alert("ATENÇÃO COMANDANTE:\nPor favor, digite seu NOME e SOBRENOME antes de iniciar a operação!");
+            document.getElementById('student-input').focus();
+            return;
+        }
+
+        document.getElementById('display-name').textContent = inputName.trim();
+        questaoAtualIndex = 0;
+        pontosAcumulados = 0;
+        faseAtual = 1;
+        carregarDadosPlanilha();
+        switchTab('screen-story-0');
+    }
+
+    function reiniciarJogo() {
+        switchTab('screen-cover');
+    }
+</script>
+
+</body>
+</html>
