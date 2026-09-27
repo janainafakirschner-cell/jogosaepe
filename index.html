@@ -41,7 +41,6 @@
             height: 100%;
             background-color: var(--tactical-dark);
             overflow: hidden;
-            position: fixed;
         }
 
         body {
@@ -50,10 +49,11 @@
             align-items: center;
         }
 
-        /* 📱 REGRA PARA TELEMÓVEIS: Ocupa a tela inteira sem margens */
+        /* 📱 PADRÃO CELULAR: Ocupa 100% da tela sem simular molduras */
         .mobile-device {
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
+            height: 100svh; /* Suporte para barras de navegação mobile */
             background: var(--tactical-dark);
             background-image: 
                 radial-gradient(rgba(255, 85, 0, 0.08) 1px, transparent 0),
@@ -63,20 +63,18 @@
             flex-direction: column;
             position: relative;
             overflow: hidden;
-            border: none;
-            box-shadow: none;
         }
 
-        /* 💻 REGRA APENAS PARA COMPUTADORES/DESKTOPS COM RATO */
-        @media (min-width: 1024px) and (hover: hover) {
+        /* 💻 APENAS PARA COMPUTADORES (Telas grandes de verdade + mouse) */
+        @media screen and (min-width: 1025px) and (pointer: fine) {
             body {
                 background-color: #020408;
                 padding: 20px;
             }
             .mobile-device {
-                width: 420px;
+                width: 410px;
                 height: 820px;
-                max-height: 90vh;
+                max-height: 92vh;
                 border-radius: 24px;
                 box-shadow: 0 0 50px rgba(0, 0, 0, 0.95), 0 0 0 10px #0a0f18;
                 border: 2px solid #1e293b;
@@ -91,7 +89,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 14px;
+            padding: 0 12px;
             z-index: 10;
             border-bottom: 1px solid #1e293b;
             font-family: monospace;
@@ -112,8 +110,7 @@
             flex-direction: column;
             overflow-y: auto;
             position: relative;
-            padding-bottom: 30px;
-            height: calc(100% - 31px);
+            padding: 6px 6px 32px 6px;
         }
 
         .screen.active {
@@ -123,15 +120,15 @@
         .tactical-card {
             background: var(--tactical-panel);
             border: 1px solid var(--tactical-border);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.8), inset 0 0 15px rgba(255, 85, 0, 0.05);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.8);
             border-radius: 8px;
-            padding: 14px;
-            margin: 8px;
+            padding: 12px;
             position: relative;
             clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
             flex: 1;
             display: flex;
             flex-direction: column;
+            justify-content: space-between;
         }
 
         .tactical-card::before {
@@ -142,24 +139,24 @@
             font-size: 7.5px;
             font-family: monospace;
             color: var(--tactical-orange);
-            letter-spacing: 1px;
             opacity: 0.7;
         }
 
-        /* AJUSTE RESPONSIVO DA IMAGEM: Cresce proporcionalmente à altura da ecrã */
+        /* IMAGEM RESPONSIVA: Ajusta a altura de acordo com a tela do celular */
         .ai-image-container {
             width: 100%;
-            flex: 1;
-            min-height: 180px;
-            max-height: 320px;
+            height: 38vh;
+            max-height: 260px;
+            min-height: 140px;
             background: #000;
             border: 1px solid var(--tactical-orange);
             border-radius: 6px;
-            margin: 8px 0 12px 0;
+            margin: 6px 0;
             position: relative;
             overflow: hidden;
             box-shadow: 0 4px 15px rgba(255, 85, 0, 0.3);
             cursor: pointer;
+            flex-shrink: 0;
         }
 
         .ai-image-container img {
@@ -186,37 +183,36 @@
             background: rgba(0, 0, 0, 0.85);
             border: 1px solid var(--tactical-orange);
             color: var(--tactical-amber);
-            font-size: 9px;
+            font-size: 8.5px;
             font-family: monospace;
-            padding: 3px 8px;
+            padding: 2px 6px;
             border-radius: 3px;
             font-weight: bold;
         }
 
         .tactical-title {
             color: var(--text-light);
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 900;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 4px;
+            letter-spacing: 1px;
+            margin-top: 4px;
         }
 
         .tactical-subtitle {
             color: var(--tactical-orange);
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 10px;
+            margin-bottom: 6px;
             font-family: monospace;
         }
 
         .tactical-line {
             color: #cbd5e1;
-            font-size: 12px;
-            margin-bottom: 8px;
-            line-height: 1.4;
+            font-size: 11px;
+            margin-bottom: 4px;
+            line-height: 1.3;
             display: flex;
             align-items: flex-start;
         }
@@ -224,40 +220,38 @@
         .tactical-line::before {
             content: "◼";
             color: var(--tactical-orange);
-            font-size: 9px;
-            margin-right: 8px;
+            font-size: 8px;
+            margin-right: 6px;
             margin-top: 2px;
         }
 
         .tactical-box {
             border: 1px dashed var(--tactical-amber);
             background: rgba(255, 170, 0, 0.05);
-            padding: 10px;
+            padding: 8px;
             text-align: left;
-            margin: 10px 0;
+            margin: 6px 0;
             color: var(--text-light);
-            font-size: 11px;
-            line-height: 1.4;
+            font-size: 10.5px;
+            line-height: 1.3;
             border-radius: 4px;
         }
 
         .commander-input-box {
             background: rgba(255, 170, 0, 0.08);
             border: 2px solid var(--tactical-amber);
-            box-shadow: 0 0 15px rgba(255, 170, 0, 0.25);
-            padding: 12px;
+            padding: 10px;
             border-radius: 6px;
-            margin-top: auto;
+            margin-top: 8px;
         }
 
         .commander-label {
             color: var(--tactical-amber);
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 900;
             font-family: monospace;
             display: block;
-            margin-bottom: 8px;
-            letter-spacing: 0.5px;
+            margin-bottom: 6px;
         }
 
         .input-tactical-highlight {
@@ -265,33 +259,30 @@
             background: #000;
             border: 1px solid var(--tactical-amber);
             color: #00ff66;
-            padding: 14px;
-            font-size: 14px;
+            padding: 10px;
+            font-size: 13px;
             font-weight: bold;
             outline: none;
             border-radius: 4px;
-            box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.8);
             font-family: monospace;
         }
 
         .input-tactical-highlight::placeholder {
             color: rgba(255, 170, 0, 0.6);
-            font-size: 12px;
-            font-weight: normal;
+            font-size: 11px;
         }
 
         .btn-tactical {
             width: 100%;
-            padding: 14px;
+            padding: 12px;
             background: linear-gradient(135deg, #d94100 0%, #801800 100%);
             color: #fff;
             border: none;
             font-weight: 900;
-            font-size: 13px;
+            font-size: 12px;
             text-transform: uppercase;
-            letter-spacing: 1px;
             cursor: pointer;
-            margin-top: 10px;
+            margin-top: 8px;
             border-radius: 4px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.6);
             display: flex;
@@ -304,30 +295,29 @@
             background: #06090e;
             border: 1px solid var(--tactical-gray);
             border-left: 3px solid var(--tactical-amber);
-            padding: 12px;
-            margin-bottom: 10px;
+            padding: 10px;
+            margin-bottom: 8px;
             color: #fff;
-            font-size: 12px;
-            line-height: 1.4;
+            font-size: 11px;
+            line-height: 1.35;
             border-radius: 4px;
         }
 
         .options-tactical {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
         }
 
         .opt-btn-tactical {
             background: rgba(10, 15, 22, 0.9);
             border: 1px solid #1e293b;
             color: var(--text-light);
-            padding: 12px 14px;
+            padding: 10px;
             text-align: left;
-            font-size: 12px;
+            font-size: 11px;
             cursor: pointer;
             border-radius: 4px;
-            transition: 0.15s;
         }
 
         .opt-btn-tactical.selected {
@@ -341,47 +331,46 @@
             background: #06090e;
             border: 1px solid var(--tactical-orange);
             border-radius: 6px;
-            padding: 16px;
+            padding: 12px;
             text-align: center;
-            margin-bottom: 10px;
         }
 
         .student-name-tactical {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 900;
             color: #fff;
             text-transform: uppercase;
         }
 
         .score-display-tactical {
-            font-size: 38px;
+            font-size: 34px;
             font-weight: 900;
             color: var(--tactical-amber);
-            margin: 6px 0;
+            margin: 4px 0;
             font-family: monospace;
         }
 
         .badge-tactical {
             display: inline-block;
-            padding: 5px 14px;
+            padding: 4px 10px;
             background: var(--tactical-orange);
             color: #000;
             font-weight: 900;
-            font-size: 11px;
+            font-size: 10px;
             border-radius: 2px;
-            margin-bottom: 10px;
+            margin-bottom: 6px;
         }
 
         .print-alert-tactical {
             background: rgba(255, 85, 0, 0.1);
             border: 1px dashed var(--tactical-orange);
-            padding: 10px;
+            padding: 8px;
             border-radius: 4px;
-            font-size: 10px;
+            font-size: 9.5px;
             color: var(--tactical-amber);
             font-weight: bold;
-            margin-top: 10px;
-            line-height: 1.35;
+            margin-top: 8px;
+            line-height: 1.3;
         }
 
         .credits-footer {
@@ -391,11 +380,11 @@
             width: 100%;
             background: #030508;
             border-top: 1px solid #1e293b;
-            padding: 6px 12px;
+            padding: 6px 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 9px;
+            font-size: 8.5px;
             color: var(--text-dim);
             z-index: 20;
             font-family: monospace;
@@ -430,7 +419,6 @@
             max-height: 80vh;
             border: 2px solid var(--tactical-orange);
             border-radius: 8px;
-            box-shadow: 0 0 30px rgba(255, 85, 0, 0.5);
             object-fit: contain;
         }
 
@@ -460,16 +448,14 @@
 
     <!-- TELA 1: CAPA (Letreiro Recife) -->
     <div id="screen-cover" class="screen active">
-        <div style="padding: 2px; flex: 1; display: flex; flex-direction: column;">
-            <div class="tactical-card">
-                
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
-                    <span style="font-size: 10px; font-weight: 900; color: #fff; background: var(--pe-blue); padding: 2px 6px; border-radius: 3px;">SAEPE PE</span>
+        <div class="tactical-card">
+            <div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px;">
+                    <span style="font-size: 9px; font-weight: 900; color: #fff; background: var(--pe-blue); padding: 2px 6px; border-radius: 3px;">SAEPE PE</span>
                     <span style="font-size: 8px; color: var(--tactical-amber); font-family: monospace; font-weight: bold;">DEFCON_1</span>
                 </div>
 
                 <div class="ai-image-container" onclick="openImageModal(document.getElementById('img-cover').src)">
-                    <!-- Imagem 1: Letreiro Recife -->
                     <img id="img-cover" src="https://iili.io/n5se0XV.png" alt="Letreiro Recife no Marco Zero">
                     <div class="ai-hud-overlay"></div>
                     <div class="ai-badge">📍 ENTRADA DA CIDADE // LETREIRO RECIFE</div>
@@ -480,14 +466,14 @@
 
                 <div class="tactical-line">Uma I.A. infectou o sistema de informações de Recife.</div>
                 <div class="tactical-line">Os painéis da cidade foram adulterados com erros linguísticos!</div>
+            </div>
 
-                <div class="commander-input-box">
-                    <label class="commander-label">[!] IDENTIFICAÇÃO OBRIGATÓRIA DO COMANDANTE:</label>
-                    <input type="text" id="student-input" class="input-tactical-highlight" placeholder="DIGITE SEU NOME E SOBRENOME AQUI..." value="">
-                    <button class="btn-tactical" onclick="startMission()">
-                        <span>ASSUMIR COMANDO</span> ➔
-                    </button>
-                </div>
+            <div class="commander-input-box">
+                <label class="commander-label">[!] IDENTIFICAÇÃO OBRIGATÓRIA DO COMANDANTE:</label>
+                <input type="text" id="student-input" class="input-tactical-highlight" placeholder="DIGITE SEU NOME E SOBRENOME AQUI..." value="">
+                <button class="btn-tactical" onclick="startMission()">
+                    <span>ASSUMIR COMANDO</span> ➔
+                </button>
             </div>
         </div>
         <div class="credits-footer">
@@ -498,19 +484,18 @@
 
     <!-- TELA NARRATIVA 0: INTRODUÇÃO DA MISSÃO (Vista Aérea) -->
     <div id="screen-story-0" class="screen">
-        <div style="padding: 2px; flex: 1; display: flex; flex-direction: column;">
-            <div class="tactical-card">
+        <div class="tactical-card">
+            <div>
                 <div class="tactical-subtitle" style="color: var(--tactical-amber);">[!] BRIEFING DE INTEL // VARREDURA AÉREA</div>
 
                 <div class="ai-image-container" onclick="openImageModal(document.getElementById('img-story-0').src)">
-                    <!-- Imagem 3: Vista Aérea das Pontes e Rio Capibaribe -->
                     <img id="img-story-0" src="https://iili.io/n5svaVV.png" alt="Vista Aérea das Pontes de Recife">
                     <div class="ai-hud-overlay"></div>
                     <div class="ai-badge">FASE 1 // RECONHECIMENTO AÉREO DE DADOS</div>
                 </div>
 
-                <div class="tactical-title" style="font-size: 15px; color: var(--tactical-orange);">MAPEAMENTO DO CAPIBARIBE</div>
-                <p style="font-size: 12px; color: #cbd5e1; line-height: 1.4; margin-bottom: 8px;">
+                <div class="tactical-title" style="font-size: 14px; color: var(--tactical-orange);">MAPEAMENTO DO CAPIBARIBE</div>
+                <p style="font-size: 11px; color: #cbd5e1; line-height: 1.3; margin-bottom: 6px;">
                     Comandante! Do alto, identificámos que as pontes sobre o Rio Capibaribe estão com as rotas de transmissão bloqueadas por ruídos textuais.
                 </p>
 
@@ -521,11 +506,11 @@
                     <strong>OBJETIVO FASE 1:</strong><br>
                     Resolver 3 questões de leitura, interpretação e inferência.
                 </div>
-
-                <button class="btn-tactical" style="margin-top: auto;" onclick="iniciarFase(1)">
-                    <span>INICIAR FASE 1 (3 QUESTÕES)</span> ➔
-                </button>
             </div>
+
+            <button class="btn-tactical" onclick="iniciarFase(1)">
+                <span>INICIAR FASE 1 (3 QUESTÕES)</span> ➔
+            </button>
         </div>
         <div class="credits-footer">
             <span class="credits-author">powered by janakirschner (versão beta)</span>
@@ -535,19 +520,18 @@
 
     <!-- TELA NARRATIVA 1: TRANSIÇÃO PARA A FASE 2 (Rua da Aurora) -->
     <div id="screen-story-1" class="screen">
-        <div style="padding: 2px; flex: 1; display: flex; flex-direction: column;">
-            <div class="tactical-card">
+        <div class="tactical-card">
+            <div>
                 <div class="tactical-subtitle" style="color: var(--tactical-green);">[✓] FASE 1 CONCLUÍDA // ROTA AÉREA LIBERADA</div>
 
                 <div class="ai-image-container" onclick="openImageModal(document.getElementById('img-story-1').src)">
-                    <!-- Imagem 4: Rua da Aurora -->
                     <img id="img-story-1" src="https://iili.io/n5svklt.png" alt="Rua da Aurora">
                     <div class="ai-hud-overlay"></div>
                     <div class="ai-badge">FASE 2 // INTERCEÇÃO NA RUA DA AURORA</div>
                 </div>
 
-                <div class="tactical-title" style="font-size: 15px; color: var(--tactical-orange);">DESINFORMAÇÃO NA RUA DA AURORA</div>
-                <p style="font-size: 12px; color: #cbd5e1; line-height: 1.4; margin-bottom: 8px;">
+                <div class="tactical-title" style="font-size: 14px; color: var(--tactical-orange);">DESINFORMAÇÃO NA RUA DA AURORA</div>
+                <p style="font-size: 11px; color: #cbd5e1; line-height: 1.3; margin-bottom: 6px;">
                     Avançámos para a margem do rio! Os edifícios históricos da Rua da Aurora estão a refletir sinais distorcidos de gramática e coesão.
                 </p>
 
@@ -558,11 +542,11 @@
                     <strong>OBJETIVO FASE 2:</strong><br>
                     Resolver 3 questões de coesão, coerência e norma-padrão.
                 </div>
-
-                <button class="btn-tactical" style="margin-top: auto;" onclick="iniciarFase(2)">
-                    <span>AVANÇAR PARA FASE 2 (3 QUESTÕES)</span> ➔
-                </button>
             </div>
+
+            <button class="btn-tactical" onclick="iniciarFase(2)">
+                <span>AVANÇAR PARA FASE 2 (3 QUESTÕES)</span> ➔
+            </button>
         </div>
         <div class="credits-footer">
             <span class="credits-author">powered by janakirschner (versão beta)</span>
@@ -572,19 +556,18 @@
 
     <!-- TELA NARRATIVA 2: TRANSIÇÃO PARA A FASE 3 (Torre de Cristal) -->
     <div id="screen-story-2" class="screen">
-        <div style="padding: 2px; flex: 1; display: flex; flex-direction: column;">
-            <div class="tactical-card">
+        <div class="tactical-card">
+            <div>
                 <div class="tactical-subtitle" style="color: var(--tactical-green);">[✓] FASE 2 CONCLUÍDA // MARGEM PURIFICADA</div>
 
                 <div class="ai-image-container" onclick="openImageModal(document.getElementById('img-story-2').src)">
-                    <!-- Imagem 2: Torre de Cristal -->
                     <img id="img-story-2" src="https://iili.io/n5skh67.png" alt="Torre de Cristal no Parque das Esculturas">
                     <div class="ai-hud-overlay"></div>
                     <div class="ai-badge">FASE 3 // TRANSMISSOR NA TORRE DE CRISTAL</div>
                 </div>
 
-                <div class="tactical-title" style="font-size: 15px; color: var(--tactical-orange);">PONTOS CEGOS DE LINGUAGEM MISTA</div>
-                <p style="font-size: 12px; color: #cbd5e1; line-height: 1.4; margin-bottom: 8px;">
+                <div class="tactical-title" style="font-size: 14px; color: var(--tactical-orange);">PONTOS CEGOS DE LINGUAGEM MISTA</div>
+                <p style="font-size: 11px; color: #cbd5e1; line-height: 1.3; margin-bottom: 6px;">
                     Localizámos o retransmissor da I.A.! Está no topo da Torre de Cristal, projetando imagens, charges e ironias adulteradas para o mar.
                 </p>
 
@@ -595,11 +578,11 @@
                     <strong>OBJETIVO FASE 3:</strong><br>
                     Resolver 3 desafios de linguagem mista, imagens e cartuns.
                 </div>
-
-                <button class="btn-tactical" style="margin-top: auto;" onclick="iniciarFase(3)">
-                    <span>AVANÇAR PARA FASE 3 (3 QUESTÕES)</span> ➔
-                </button>
             </div>
+
+            <button class="btn-tactical" onclick="iniciarFase(3)">
+                <span>AVANÇAR PARA FASE 3 (3 QUESTÕES)</span> ➔
+            </button>
         </div>
         <div class="credits-footer">
             <span class="credits-author">powered by janakirschner (versão beta)</span>
@@ -609,19 +592,18 @@
 
     <!-- TELA NARRATIVA 3: TRANSIÇÃO PARA A QUESTÃO FINAL (Marco Zero) -->
     <div id="screen-story-3" class="screen">
-        <div style="padding: 2px; flex: 1; display: flex; flex-direction: column;">
-            <div class="tactical-card">
+        <div class="tactical-card">
+            <div>
                 <div class="tactical-subtitle" style="color: var(--pe-yellow);">[!] ALERTA CRÍTICO // MARCO ZERO DE RECIFE</div>
 
                 <div class="ai-image-container" onclick="openImageModal(document.getElementById('img-story-3').src)">
-                    <!-- Imagem 5: Marco Zero Rosa dos Ventos -->
                     <img id="img-story-3" src="https://iili.io/n5s8q5g.png" alt="Praça do Marco Zero em Recife">
                     <div class="ai-hud-overlay"></div>
                     <div class="ai-badge">FASE FINAL // O NÚCLEO NO MARCO ZERO</div>
                 </div>
 
-                <div class="tactical-title" style="font-size: 15px; color: var(--pe-red);">DESENLACE NA ROSA DOS VENTOS</div>
-                <p style="font-size: 12px; color: #cbd5e1; line-height: 1.4; margin-bottom: 8px;">
+                <div class="tactical-title" style="font-size: 14px; color: var(--pe-red);">DESENLACE NA ROSA DOS VENTOS</div>
+                <p style="font-size: 11px; color: #cbd5e1; line-height: 1.3; margin-bottom: 6px;">
                     Chegámos ao coração geográfico de Recife! O vírus concentrou a sua última tese ambígua no centro da Rosa dos Ventos.
                 </p>
 
@@ -632,11 +614,11 @@
                     <strong>CONFRONTO FINAL:</strong><br>
                     Acerte a última questão de Português para libertar Pernambuco!
                 </div>
-
-                <button class="btn-tactical" style="margin-top: auto; background: linear-gradient(135deg, #ce1126 0%, #800000 100%);" onclick="iniciarFase(4)">
-                    <span>ENFRENTAR QUESTÃO FINAL (1 QUESTÃO)</span> ➔
-                </button>
             </div>
+
+            <button class="btn-tactical" style="background: linear-gradient(135deg, #ce1126 0%, #800000 100%);" onclick="iniciarFase(4)">
+                <span>ENFRENTAR QUESTÃO FINAL (1 QUESTÃO)</span> ➔
+            </button>
         </div>
         <div class="credits-footer">
             <span class="credits-author">powered by janakirschner (versão beta)</span>
@@ -646,14 +628,14 @@
 
     <!-- TELA DE GAMEPLAY (QUESTÕES) -->
     <div id="screen-game" class="screen">
-        <div style="padding: 2px; flex: 1; display: flex; flex-direction: column;">
-            <div class="tactical-card">
+        <div class="tactical-card">
+            <div>
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                     <span id="txt-setor" style="font-size: 9px; color: var(--tactical-green); font-family: monospace; font-weight: bold;">SETOR TÁTICO // FASE 1</span>
                     <span id="txt-contador" style="font-size: 9px; color: var(--tactical-amber); font-family: monospace; font-weight: bold;">Q 01 / 10</span>
                 </div>
 
-                <div class="ai-image-container" style="max-height: 160px; min-height: 120px;" onclick="openImageModal(document.getElementById('img-questao').src)">
+                <div class="ai-image-container" style="height: 120px;" onclick="openImageModal(document.getElementById('img-questao').src)">
                     <img id="img-questao" src="https://iili.io/n5se0XV.png" alt="Imagem da Questão">
                     <div class="ai-hud-overlay"></div>
                     <div class="ai-badge">🔍 CLIQUE PARA AMPLIAR</div>
@@ -670,11 +652,11 @@
                     <button class="opt-btn-tactical" id="btn-opt-c" onclick="selectOption(this, 'C')">C) Carregando...</button>
                     <button class="opt-btn-tactical" id="btn-opt-d" onclick="selectOption(this, 'D')">D) Carregando...</button>
                 </div>
-
-                <button class="btn-tactical" style="margin-top: auto;" onclick="proximaQuestao()">
-                    <span>CONFIRMAR DECISÃO</span> ➔
-                </button>
             </div>
+
+            <button class="btn-tactical" onclick="proximaQuestao()">
+                <span>CONFIRMAR DECISÃO</span> ➔
+            </button>
         </div>
         <div class="credits-footer">
             <span class="credits-author">powered by janakirschner (versão beta)</span>
@@ -684,31 +666,29 @@
 
     <!-- TELA FINAL: DESFECHO E RESULTADO -->
     <div id="screen-result" class="screen">
-        <div style="padding: 2px; flex: 1; display: flex; flex-direction: column;">
-            <div class="tactical-card" style="text-align: center;">
-                <div class="result-card-tactical">
-                    <div class="student-name-tactical" id="display-name">NOME DO ALUNO</div>
-                    <div style="font-size: 8.5px; color: var(--text-dim); font-family: monospace; margin-top: 2px;">COMPROVANTE OFICIAL DE OPERAÇÃO</div>
-                    
-                    <div class="score-display-tactical"><span id="txt-score">0</span> <span style="font-size: 14px; color: var(--text-dim);">PTS</span></div>
+        <div class="tactical-card">
+            <div class="result-card-tactical">
+                <div class="student-name-tactical" id="display-name">NOME DO ALUNO</div>
+                <div style="font-size: 8.5px; color: var(--text-dim); font-family: monospace; margin-top: 2px;">COMPROVANTE OFICIAL DE OPERAÇÃO</div>
+                
+                <div class="score-display-tactical"><span id="txt-score">0</span> <span style="font-size: 14px; color: var(--text-dim);">PTS</span></div>
 
-                    <div class="badge-tactical" id="txt-medalha">MESTRE EM LÍNGUA PORTUGUESA 🏆</div>
+                <div class="badge-tactical" id="txt-medalha">MESTRE EM LÍNGUA PORTUGUESA 🏆</div>
 
-                    <p style="font-size: 11px; color: #cbd5e1; line-height: 1.4; margin-top: 6px;">
-                        <strong>DESFECHO DA MISSÃO:</strong><br>
-                        O vírus foi erradicado! A comunicação em Recife e Pernambuco foi restaurada com o seu excelente domínio da Língua Portuguesa!
-                    </p>
+                <p style="font-size: 10px; color: #cbd5e1; line-height: 1.35; margin-top: 4px;">
+                    <strong>DESFECHO DA MISSÃO:</strong><br>
+                    O vírus foi erradicado! A comunicação em Recife e Pernambuco foi restaurada com o seu excelente domínio da Língua Portuguesa!
+                </p>
 
-                    <div class="print-alert-tactical">
-                        📸 <strong>ATENÇÃO COMANDANTE!</strong><br>
-                        Tire um PRINT desta tela para comprovar a conclusão da missão ao seu professor!
-                    </div>
+                <div class="print-alert-tactical">
+                    📸 <strong>ATENÇÃO COMANDANTE!</strong><br>
+                    Tire um PRINT desta tela para comprovar a conclusão da missão ao seu professor!
                 </div>
-
-                <button class="btn-tactical" style="margin-top: auto; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid var(--tactical-orange);" onclick="reiniciarJogo()">
-                    <span>REEXECUTAR OPERAÇÃO</span>
-                </button>
             </div>
+
+            <button class="btn-tactical" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid var(--tactical-orange);" onclick="reiniciarJogo()">
+                <span>REEXECUTAR OPERAÇÃO</span>
+            </button>
         </div>
         <div class="credits-footer">
             <span class="credits-author">powered by janakirschner (versão beta)</span>
